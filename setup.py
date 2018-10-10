@@ -5,7 +5,7 @@ import ddlogs
 
 from setuptools import setup, find_packages
 
-description = 'Amazon Kinesis Firehose logging handler and utilities'
+description = 'Datadog Logs logging handler and utilities'
 long_description = description
 if os.path.exists('README.txt'):
     long_description = open('README.txt').read()
