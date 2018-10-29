@@ -6,7 +6,7 @@ Datadog logs logging handler and utilities
 
 __author__ = "Masashi Terui <marcy9114+pypi@gmail.com>"
 __status__ = "beta"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __date__    = "10 Oct 2018"
 
 
@@ -71,7 +71,7 @@ class DatadogLogsHandler(logging.Handler):
             self.socket.send('{} {}\n'.format(
                 self.api_key,
                 json.dumps(log)).encode('utf-8'))
-        except BrokenPipeError:
+        except ConnectionError:
             self._connect()
             self.emit(record)
         except:
