@@ -6,7 +6,7 @@ Datadog logs logging handler and utilities
 
 __author__ = "Masashi Terui <marcy9114+pypi@gmail.com>"
 __status__ = "beta"
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __date__    = "10 Oct 2018"
 
 
@@ -30,9 +30,14 @@ class DatadogLogsHandler(logging.Handler):
         self.service = kwargs.pop('service', None)
         self.host = kwargs.pop('host', socket.gethostname())
         self.api_key = kwargs.pop('api_key', os.environ.get('DD_API_KEY', ''))
+        self.ssl = kwargs.pop('ssl', True)
+        self._connect()
+
+
+    def _connect(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         port = 10514
-        if kwargs.pop('ssl', True):
+        if self.ssl:
             self.socket = ssl.wrap_socket(self.socket)
             port = 10516
         self.socket.connect(('lambda-intake.logs.datadoghq.com', port))
@@ -66,6 +71,9 @@ class DatadogLogsHandler(logging.Handler):
             self.socket.send('{} {}\n'.format(
                 self.api_key,
                 json.dumps(log)).encode('utf-8'))
+        except BrokenPipeError:
+            self._connect()
+            self.emit(record)
         except:
             self.handleError(record)
 
