@@ -6,7 +6,7 @@ Datadog logs logging handler and utilities
 
 __author__ = "Masashi Terui <marcy9114+pypi@gmail.com>"
 __status__ = "beta"
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 __date__    = "10 Oct 2018"
 
 
@@ -31,6 +31,7 @@ class DatadogLogsHandler(logging.Handler):
         self.host = kwargs.pop('host', socket.gethostname())
         self.api_key = kwargs.pop('api_key', os.environ.get('DD_API_KEY', ''))
         self.ssl = kwargs.pop('ssl', True)
+        self.blocking = kwargs.pop('blocking', False)
         self._connect()
 
 
@@ -41,6 +42,7 @@ class DatadogLogsHandler(logging.Handler):
             self.socket = ssl.wrap_socket(self.socket)
             port = 10516
         self.socket.connect(('lambda-intake.logs.datadoghq.com', port))
+        self.socket.setblocking(self.blocking)
 
 
     def emit(self, record):
