@@ -6,7 +6,7 @@ Datadog logs logging handler and utilities
 
 __author__ = "Masashi Terui <marcy9114+pypi@gmail.com>"
 __status__ = "beta"
-__version__ = "0.1.4"
+__version__ = "0.2.0"
 __date__    = "10 Oct 2018"
 
 
